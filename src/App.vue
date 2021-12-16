@@ -6,7 +6,7 @@
                 :page="page"
                 :pages="pages"
                 @onPageChanged="onPageChanged"
-                @edit="handleEdit"
+                @edit="handleEditDialog"
             />
             <edit-user
                 :open="isEditOpen"

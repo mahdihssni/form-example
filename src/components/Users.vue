@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         onEdit(user) {
-            this.$emit("edit", user);
+            this.$emit("edit", true, user);
         },
         onPageChanged(page) {
             this.$emit("onPageChanged", page);
