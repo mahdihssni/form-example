@@ -1,28 +1,70 @@
 <template>
-<div>
-    <div v-for="(user, index) in users" :key="user.id" class="mb-4 border-2 flex p-4">
-        <p class="mx-2">
-            {{ index + 1 }}
-        </p >
-        <p class="mx-2">
-            <span class="text-red-500">name: </span>
-            <span>{{user.name}}</span>
-        </p>
-        <p class="mx-2">
-            <span class="text-red-500">email: </span>
-            <span>{{user.email}}</span>
-        </p>
-        <button class="mx-2" @click="onEdit(user)">edit</button>
-    </div>
-</div>
+    <v-card class="p-5">
+        <v-row class="d-flex align-center">
+            <v-col lg="6">
+                <v-card-title> Users List </v-card-title></v-col>    
+            <v-col lg="6" class="d-flex justify-end">
+                <v-btn color="primary">Create User</v-btn>    
+            </v-col>    
+        </v-row>
+
+        <v-simple-table fixed-header height="550px">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(user, index) in users" :key="user.id">
+                    <td>{{ ++index }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <v-btn color="primary" x-small icon plain class="mr-2" @click="onEdit(user)">
+                            <v-icon>$edit</v-icon>
+                        </v-btn>
+                        <v-btn color="error" x-small icon plain @click="emit('onRemove', user)">
+                            <v-icon>fas fa-trash-alt</v-icon>
+                        </v-btn>
+                    </td>
+                </tr>
+            </tbody>
+        </v-simple-table>
+
+        <v-pagination
+            class="mt-5"
+            @input="onPageChanged"
+            :value="page"
+            :length="pages"
+        />
+    </v-card>
 </template>
 <script>
 export default {
-    props: ['users'],
+    props: {
+        users: {
+            type: Array,
+            require: true,
+        },
+        page: {
+            type: Number,
+            require: true,
+        },
+        pages: {
+            type: Number,
+            require: true,
+        },
+    },
     methods: {
         onEdit(user) {
-            this.$emit('edit', user)
-        }
+            this.$emit("edit", user);
+        },
+        onPageChanged(page) {
+            this.$emit("onPageChanged", page);
+        },
     },
-}
+};
 </script>
