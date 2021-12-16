@@ -7,7 +7,7 @@
                 <v-row>
                     <v-col md="6">
                         <v-text-field
-                            :value="state.name"
+                            v-model="state.name"
                             outlined
                             dense
                             label="Name"
@@ -60,7 +60,7 @@ export default {
                 return this.$props.open;
             },
             set(value) {
-                if (value == false) {
+                if (!value) {
                     this.state.name = "";
                     this.state.email = "";
                 }
@@ -70,6 +70,7 @@ export default {
     },
     watch: {
         user() {
+            if (!this.user) return;
             this.state.name = this.user.name;
             this.state.email = this.user.email;
         },
