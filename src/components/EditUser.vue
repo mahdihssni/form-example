@@ -43,7 +43,6 @@ export default {
             required: true,
         },
         user: {
-            type: Object,
             required: true,
         },
     },
@@ -76,8 +75,7 @@ export default {
         },
     },
     methods: {
-        onSubmit() {
-            
+        onSubmit() {            
             const newUser = {
                 id: this.user.id,
                 name: this.state.name,
