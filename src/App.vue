@@ -11,7 +11,7 @@
             <edit-user
                 :open="isEditOpen"
                 :user="editingUser"
-                @close="handleEditClose"
+                @editDialog="handleEditDialog"
                 @update="updateUser"
             />
         </v-container>
@@ -41,7 +41,10 @@ export default {
     },
     computed: {
         usersLimited: function () {
-            return this.users.slice((this.page - 1) * this.userPerPage, this.page * this.userPerPage);
+            return this.users.slice(
+                (this.page - 1) * this.userPerPage,
+                this.page * this.userPerPage
+            );
         },
         pages: function () {
             return Math.ceil(this.users.length / this.userPerPage);
@@ -52,9 +55,9 @@ export default {
             this.isEditOpen = true;
             this.editingUser = user;
         },
-        handleEditClose() {
-            this.isEditOpen = false;
-            this.editingUser = null;
+        handleEditDialog(value, user = null) {
+            this.isEditOpen = value
+            this.editingUser = value ? user : null
         },
         updateUser(newUser) {
             this.users = this.users.map((user) => {
@@ -66,8 +69,8 @@ export default {
             });
         },
         onPageChanged(page) {
-          this.page = page
-        }
+            this.page = page;
+        },
     },
 };
 </script>
