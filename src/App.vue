@@ -51,10 +51,6 @@ export default {
         },
     },
     methods: {
-        handleEdit(user) {
-            this.isEditOpen = true;
-            this.editingUser = user;
-        },
         handleEditDialog(value, user = null) {
             this.isEditOpen = value
             this.editingUser = value ? user : null
@@ -67,6 +63,8 @@ export default {
                     return user;
                 }
             });
+
+            this.handleEditDialog(false)
         },
         onPageChanged(page) {
             this.page = page;
