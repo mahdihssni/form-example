@@ -4,7 +4,7 @@
             <v-col lg="6">
                 <v-card-title> Users List </v-card-title></v-col>    
             <v-col lg="6" class="d-flex justify-end">
-                <v-btn color="primary">Create User</v-btn>    
+                <v-btn @click="onCreate" color="primary">Create User</v-btn>    
             </v-col>    
         </v-row>
 
@@ -61,6 +61,9 @@ export default {
     methods: {
         onEdit(user) {
             this.$emit("edit", true, user);
+        },
+        onCreate() {
+            this.$emit("create", true)
         },
         onPageChanged(page) {
             this.$emit("onPageChanged", page);

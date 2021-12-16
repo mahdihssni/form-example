@@ -7,12 +7,18 @@
                 :pages="pages"
                 @onPageChanged="onPageChanged"
                 @edit="handleEditDialog"
+                @create="handleCreateDialog"
             />
             <edit-user
                 :open="isEditOpen"
                 :user="editingUser"
                 @editDialog="handleEditDialog"
                 @update="updateUser"
+            />
+            <create-user
+                :open="isCreateOpen"
+                @createDialog="handleCreateDialog"
+                @create="createUser"
             />
         </v-container>
     </v-app>
@@ -21,6 +27,7 @@
 <script>
 import Users from "./components/Users.vue";
 import EditUser from "./components/EditUser.vue";
+import CreateUser from "./components/CreateUser.vue";
 import { getData } from "./utils/data";
 import "./index.css";
 
@@ -31,6 +38,7 @@ export default {
             users: getData(50),
             userPerPage: 15,
             page: 1,
+            isCreateOpen: false,
             isEditOpen: false,
             editingUser: null,
         };
@@ -38,6 +46,7 @@ export default {
     components: {
         Users,
         EditUser,
+        CreateUser,
     },
     computed: {
         usersLimited: function () {
@@ -51,9 +60,17 @@ export default {
         },
     },
     methods: {
+        handleCreateDialog(value) {
+            console.log(value)
+            this.isCreateOpen = value;
+        },
         handleEditDialog(value, user = null) {
-            this.isEditOpen = value
-            this.editingUser = value ? user : null
+            this.isEditOpen = value;
+            this.editingUser = value ? user : null;
+        },
+        createUser(newUser) {
+            this.users.unshift(newUser);
+            this.handleCreateDialog(false);
         },
         updateUser(newUser) {
             this.users = this.users.map((user) => {
@@ -64,7 +81,7 @@ export default {
                 }
             });
 
-            this.handleEditDialog(false)
+            this.handleEditDialog(false);
         },
         onPageChanged(page) {
             this.page = page;
