@@ -61,7 +61,6 @@ export default {
     },
     methods: {
         handleCreateDialog(value) {
-            console.log(value)
             this.isCreateOpen = value;
         },
         handleEditDialog(value, user = null) {

@@ -62,8 +62,6 @@ export default {
                 if (!value) {
                     this.newUser.name = "";
                     this.newUser.email = "";
-                } else {
-                    console.log(this)
                 }
 
                 this.$emit("createDialog", value);
