@@ -26,7 +26,7 @@
                         <v-btn color="primary" x-small icon plain class="mr-2" @click="onEdit(user)">
                             <v-icon>$edit</v-icon>
                         </v-btn>
-                        <v-btn color="error" x-small icon plain @click="emit('onRemove', user)">
+                        <v-btn color="error" x-small icon plain @click="onDelete(user)">
                             <v-icon>fas fa-trash-alt</v-icon>
                         </v-btn>
                     </td>
@@ -64,6 +64,9 @@ export default {
         },
         onCreate() {
             this.$emit("create", true)
+        },
+        onDelete(user) {
+            this.$emit("delete", true, user)
         },
         onPageChanged(page) {
             this.$emit("onPageChanged", page);
