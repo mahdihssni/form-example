@@ -19,7 +19,7 @@
             </thead>
             <tbody>
                 <tr v-for="(user, index) in users" :key="user.id">
-                    <td>{{ ++index }}</td>
+                    <td>{{ startRowNumber + index }}</td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>
@@ -57,6 +57,11 @@ export default {
             type: Number,
             require: true,
         },
+    },
+    computed: {
+        startRowNumber() {
+            return ((this.page - 1) * this.usersPerPage) + 1
+        }
     },
     methods: {
         onEdit(user) {
