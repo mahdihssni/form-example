@@ -5,8 +5,10 @@ import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import vueUniqueId from 'vue-unique-id'
+import vuex from 'vuex'
 
 Vue.use(vueUniqueId)
+Vue.use(vuex)
 Vue.config.productionTip = false
 
 new Vue({
