@@ -35,13 +35,31 @@ const mutations = {
         state.currentPage = pageNumber;
     },
     dialogTrigger(state, options) {
-        let { dialogName, isOpen, users } = options;
+        let { dialogName, isOpen, user } = options;
 
         state[dialogTriggerEnums[dialogName]] = isOpen;
-        state.selectedUser = ["edit", "delete"].includes(dialogName) && users ? users : null;
+        state.selectedUser = ["edit", "delete"].includes(dialogName) && user ? user : null;
+    },
+    modifySelectedUser(state, options) {
+        let { user, clear } = options;
+        if (clear) return (state.selectedUser = null);
+
+        state.selectedUser = 
+            state.selectedUser instanceof Object && !(state.selectedUser instanceof Array)
+            ? Object.assign(state.selectedUser, user)
+            : user;
     },
     addUser(state, user) {
         state.list.unshift(user);
+    },
+    editUser(state, user) {
+        state.list = state.list.map((item) => {
+            if (item.id === user.id) {
+                return user;
+            } else {
+                return item;
+            }
+        });
     },
 };
 

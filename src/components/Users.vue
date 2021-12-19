@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         onEdit(user) {
-            this.$emit("edit", true, user);
+            this.$store.commit("dialogTrigger", { dialogName: "edit", isOpen: true, user });
         },
         onCreate() {
             this.$store.commit("dialogTrigger", { dialogName: "create", isOpen: true });
