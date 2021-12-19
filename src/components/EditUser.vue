@@ -54,6 +54,7 @@ export default {
         selectedUser() {
             let selectedUser = this.$store.state.users.selectedUser;
             if (!selectedUser) return;
+            
             this.state.name = selectedUser.name;
             this.state.email = selectedUser.email;
         },
