@@ -1,10 +1,8 @@
 <template>
     <v-app id="app">
+        {{ usersStore }}
         <v-container>
             <users
-                :users="usersLimited"
-                :page="page"
-                :pages="pages"
                 @onPageChanged="onPageChanged"
                 @edit="handleEditDialog"
                 @create="handleCreateDialog"
@@ -21,7 +19,12 @@
                 @createDialog="handleCreateDialog"
                 @create="createUser"
             />
-            <delete-user :open="isDeleteOpen" :user="deletingUser" @deleteDialog="handleDeleteDialog" @delete="deleteUser" />
+            <delete-user
+                :open="isDeleteOpen"
+                :user="deletingUser"
+                @deleteDialog="handleDeleteDialog"
+                @delete="deleteUser"
+            />
         </v-container>
     </v-app>
 </template>
@@ -45,7 +48,7 @@ export default {
             isEditOpen: false,
             editingUser: null,
             isDeleteOpen: false,
-            deletingUser: null
+            deletingUser: null,
         };
     },
     components: {
@@ -55,14 +58,15 @@ export default {
         DeleteUser,
     },
     computed: {
+        usersStore() {
+            console.log(this.$store);
+            return "";
+        },
         usersLimited: function () {
             return this.users.slice(
                 (this.page - 1) * this.userPerPage,
                 this.page * this.userPerPage
             );
-        },
-        pages: function () {
-            return Math.ceil(this.users.length / this.userPerPage);
         },
     },
     methods: {
@@ -93,10 +97,12 @@ export default {
             this.handleEditDialog(false);
         },
         deleteUser(user) {
-            const indexOfUser = this.users.findIndex(item => item.id == user.id)
-            this.users.splice(indexOfUser, 1)
+            const indexOfUser = this.users.findIndex(
+                (item) => item.id == user.id
+            );
+            this.users.splice(indexOfUser, 1);
 
-            this.handleDeleteDialog(false)
+            this.handleDeleteDialog(false);
         },
         onPageChanged(page) {
             this.page = page;

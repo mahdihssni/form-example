@@ -1,11 +1,10 @@
 <template>
     <v-card class="p-5">
         <v-row class="d-flex align-center">
-            <v-col lg="6">
-                <v-card-title> Users List </v-card-title></v-col>    
+            <v-col lg="6"> <v-card-title> Users List </v-card-title></v-col>
             <v-col lg="6" class="d-flex justify-end">
-                <v-btn @click="onCreate" color="primary">Create User</v-btn>    
-            </v-col>    
+                <v-btn @click="onCreate" color="primary">Create User</v-btn>
+            </v-col>
         </v-row>
 
         <v-simple-table fixed-header height="550px">
@@ -18,15 +17,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(user, index) in users" :key="user.id">
-                    <td>{{ ++index }}</td>
+                <tr v-for="(user, index) in usersPaginatedList" :key="user.id">
+                    <td>{{ startRowNumberInPage + index }}</td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        <v-btn color="primary" x-small icon plain class="mr-2" @click="onEdit(user)">
+                        <v-btn
+                            color="primary"
+                            x-small
+                            icon
+                            plain
+                            class="mr-2"
+                            @click="onEdit(user)"
+                        >
                             <v-icon>$edit</v-icon>
                         </v-btn>
-                        <v-btn color="error" x-small icon plain @click="onDelete(user)">
+                        <v-btn
+                            color="error"
+                            x-small
+                            icon
+                            plain
+                            @click="onDelete(user)"
+                        >
                             <v-icon>fas fa-trash-alt</v-icon>
                         </v-btn>
                     </td>
@@ -37,39 +49,45 @@
         <v-pagination
             class="mt-5"
             @input="onPageChanged"
-            :value="page"
-            :length="pages"
+            :value="currentPage"
+            :length="totalPages"
+            :total-visible="visiblePageItems"
         />
     </v-card>
 </template>
 <script>
+import { mapGetters, mapState } from "vuex";
+
 export default {
-    props: {
-        users: {
-            type: Array,
-            require: true,
+    data() {
+        return { visiblePageItems: 5 }
+    },
+    computed: {
+        startRowNumberInPage() {
+            return ((this.$store.state.users.currentPage - 1) * this.$store.state.users.usersPerPage ) + 1
         },
-        page: {
-            type: Number,
-            require: true,
-        },
-        pages: {
-            type: Number,
-            require: true,
-        },
+        ...mapState({
+            currentPage: state => state.users.currentPage
+        }),
+        ...mapGetters(["usersPaginatedList", "totalPages"]),
+    },
+    computed: {
+        startRowNumber() {
+            return ((this.page - 1) * this.usersPerPage) + 1
+        }
     },
     methods: {
         onEdit(user) {
             this.$emit("edit", true, user);
         },
         onCreate() {
-            this.$emit("create", true)
+            this.$emit("create", true);
         },
         onDelete(user) {
-            this.$emit("delete", true, user)
+            this.$emit("delete", true, user);
         },
         onPageChanged(page) {
-            this.$emit("onPageChanged", page);
+            this.$store.commit("changeCurrentPage", page);
         },
     },
 };
