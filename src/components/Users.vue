@@ -22,23 +22,10 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        <v-btn
-                            color="primary"
-                            x-small
-                            icon
-                            plain
-                            class="mr-2"
-                            @click="onEdit(user)"
-                        >
+                        <v-btn color="primary" x-small icon plain class="mr-2" @click="onEdit(user)">
                             <v-icon>$edit</v-icon>
                         </v-btn>
-                        <v-btn
-                            color="error"
-                            x-small
-                            icon
-                            plain
-                            @click="onDelete(user)"
-                        >
+                        <v-btn color="error" x-small icon plain @click="onDelete(user)">
                             <v-icon>fas fa-trash-alt</v-icon>
                         </v-btn>
                     </td>
@@ -46,13 +33,7 @@
             </tbody>
         </v-simple-table>
 
-        <v-pagination
-            class="mt-5"
-            @input="onPageChanged"
-            :value="currentPage"
-            :length="totalPages"
-            :total-visible="visiblePageItems"
-        />
+        <v-pagination class="mt-5" @input="onPageChanged" :value="currentPage" :length="totalPages" :total-visible="visiblePageItems" />
     </v-card>
 </template>
 <script>
@@ -60,31 +41,26 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
     data() {
-        return { visiblePageItems: 5 }
+        return { visiblePageItems: 5 };
     },
     computed: {
         startRowNumberInPage() {
-            return ((this.$store.state.users.currentPage - 1) * this.$store.state.users.usersPerPage ) + 1
+            return (this.$store.state.users.currentPage - 1) * this.$store.state.users.usersPerPage + 1;
         },
         ...mapState({
-            currentPage: state => state.users.currentPage
+            currentPage: (state) => state.users.currentPage,
         }),
         ...mapGetters(["usersPaginatedList", "totalPages"]),
     },
-    computed: {
-        startRowNumber() {
-            return ((this.page - 1) * this.usersPerPage) + 1
-        }
-    },
     methods: {
         onEdit(user) {
-            this.$emit("edit", true, user);
+            this.$store.commit("dialogTrigger", { dialogName: "edit", isOpen: true, user });
         },
         onCreate() {
-            this.$emit("create", true);
+            this.$store.commit("dialogTrigger", { dialogName: "create", isOpen: true });
         },
         onDelete(user) {
-            this.$emit("delete", true, user);
+            this.$store.commit("dialogTrigger", { dialogName: "delete", isOpen: true, user });
         },
         onPageChanged(page) {
             this.$store.commit("changeCurrentPage", page);

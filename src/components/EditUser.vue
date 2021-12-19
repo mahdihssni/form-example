@@ -6,46 +6,24 @@
             <v-container>
                 <v-row>
                     <v-col md="6">
-                        <v-text-field
-                            v-model="state.name"
-                            outlined
-                            dense
-                            label="Name"
-                            required
-                        />
+                        <v-text-field v-model="state.name" outlined dense label="Name" required />
                     </v-col>
                     <v-col md="6">
-                        <v-text-field
-                            v-model="state.email"
-                            outlined
-                            dense
-                            label="Email"
-                            required
-                        />
+                        <v-text-field v-model="state.email" outlined dense label="Email" required />
                     </v-col>
                 </v-row>
             </v-container>
 
             <v-card-actions>
                 <v-btn @click="onSubmit" color="primary">Submit</v-btn>
-                <v-btn @click="editDialog = false" color="secondary"
-                    >Close</v-btn
-                >
+                <v-btn @click="editDialog = false" color="secondary">Close</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
-    props: {
-        open: {
-            type: Boolean,
-            required: true,
-        },
-        user: {
-            required: true,
-        },
-    },
     data() {
         return {
             state: {
@@ -55,35 +33,37 @@ export default {
         };
     },
     computed: {
+        ...mapState({
+            selectedUser: (state) => state.users.selectedUser,
+        }),
         editDialog: {
             get() {
-                return this.$props.open;
+                return this.$store.getters.getDialogStatus("edit");
             },
             set(value) {
                 if (!value) {
                     this.state.name = "";
                     this.state.email = "";
                 }
-                this.$emit("editDialog", value);
+
+                this.$store.commit("dialogTrigger", { dialogName: "edit", isOpen: value });
             },
         },
     },
     watch: {
-        user() {
-            if (!this.user) return;
-            this.state.name = this.user.name;
-            this.state.email = this.user.email;
+        selectedUser() {
+            let selectedUser = this.$store.state.users.selectedUser;
+            if (!selectedUser) return;
+            
+            this.state.name = selectedUser.name;
+            this.state.email = selectedUser.email;
         },
     },
     methods: {
-        onSubmit() {            
-            const newUser = {
-                id: this.user.id,
-                name: this.state.name,
-                email: this.state.email,
-            };
-            
-            this.$emit("update", newUser);
+        onSubmit() {
+            this.$store.commit("editUser", { id: this.$store.state.users.selectedUser.id, ...this.state });
+            this.$store.commit("modifySelectedUser", { clear: true });
+            this.$store.commit("dialogTrigger", { dialogName: "edit", isOpen: false });
         },
     },
 };
