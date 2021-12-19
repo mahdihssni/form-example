@@ -61,6 +61,13 @@ const mutations = {
             }
         });
     },
+    deleteUser(state, user) {
+        const indexOfUser = state.list.findIndex(
+            (item) => item.id == user.id
+        );
+
+        state.list.splice(indexOfUser, 1);
+    }
 };
 
 export default {

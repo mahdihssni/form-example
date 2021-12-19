@@ -6,39 +6,36 @@
 
             <v-card-actions>
                 <v-btn @click="onSubmit" color="error">Remove</v-btn>
-                <v-btn @click="deleteDialog = false" color="secondary">
-                    Close
-                </v-btn>
+                <v-btn @click="deleteDialog = false" color="secondary"> Close </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
+
 export default {
-    props: {
-        open: {
-            type: Boolean,
-            required: true,
-        },
-        user: {
-            required: true
-        }
-    },
     computed: {
+        ...mapState({
+            user: state => state.users.selectedUser
+        }),
         deleteDialog: {
             get() {
-                return this.$props.open;
+                return this.$store.getters.getDialogStatus('delete');
             },
             set(value) {
-                this.$emit("deleteDialog", value);
+                this.$store.commit("dialogTrigger", { dialogName: "delete", isOpen: value });
             },
         },
     },
     methods: {
         onSubmit() {
-            this.$emit("delete", this.user)
-        }
-    }
+            this.$store.commit("deleteUser", this.$store.state.users.selectedUser);
+            this.$store.commit("modifySelectedUser", { clear: true });
+            this.$store.commit("dialogTrigger", { dialogName: "delete", isOpen: false });
+        },
+    },
 };
 </script>

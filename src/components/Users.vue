@@ -60,7 +60,7 @@ export default {
             this.$store.commit("dialogTrigger", { dialogName: "create", isOpen: true });
         },
         onDelete(user) {
-            this.$emit("delete", true, user);
+            this.$store.commit("dialogTrigger", { dialogName: "delete", isOpen: true, user });
         },
         onPageChanged(page) {
             this.$store.commit("changeCurrentPage", page);
