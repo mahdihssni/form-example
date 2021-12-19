@@ -71,11 +71,6 @@ export default {
         }),
         ...mapGetters(["usersPaginatedList", "totalPages"]),
     },
-    computed: {
-        startRowNumber() {
-            return ((this.page - 1) * this.usersPerPage) + 1
-        }
-    },
     methods: {
         onEdit(user) {
             this.$emit("edit", true, user);
